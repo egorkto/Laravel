@@ -1,9 +1,8 @@
 <?php
 
-use App\Http\Controllers\AboutController;
-use App\Http\Controllers\ContactsController;
-use App\Http\Controllers\MainController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -18,6 +17,16 @@ Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('post.ed
 Route::patch('/posts/{post}', [PostController::class, 'update'])->name('post.update');
 Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('post.destroy');
 
-Route::get('/main', [MainController::class, 'index'])->name('main.index');
-Route::get('/contacts', [ContactsController::class, 'index'])->name('contacts.index');
-Route::get('/about', [AboutController::class, 'index'])->name('about.index');
+Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
+Route::get('/categories/create', [CategoryController::class, 'create'])->name('category.create');
+Route::post('/categories/store', [CategoryController::class, 'store'])->name('category.store');
+Route::get('/categories/{category}/edit', [CategoryController::class, 'edit'])->name('category.edit');
+Route::patch('/categories/{category}', [CategoryController::class, 'update'])->name('category.update');
+Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('category.destroy');
+
+Route::get('/tags', [TagController::class, 'index'])->name('tags.index');
+Route::get('/tags/create', [TagController::class, 'create'])->name('tag.create');
+Route::post('/tags/store', [TagController::class, 'store'])->name('tag.store');
+Route::get('/tags/{tag}/edit', [TagController::class, 'edit'])->name('tag.edit');
+Route::patch('/tags/{tag}', [TagController::class, 'update'])->name('tag.update');
+Route::delete('/tags/{tag}', [TagController::class, 'destroy'])->name('tag.destroy');

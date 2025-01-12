@@ -14,16 +14,13 @@
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="{{ route('main.index') }}">Home</a>
+                                <a class="nav-link {{request()->is('posts') ? 'active' : ''}}" aria-current="page" href="{{ route('posts.index') }}">Posts</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('posts.index') }}">Posts</a>
+                                <a class="nav-link {{request()->is('categories') ? 'active' : ''}}" href="{{ route('categories.index') }}">Categories</a>
                                 </li>
                              <li class="nav-item">
-                                <a class="nav-link" href="{{ route('contacts.index') }}">Contacts</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" aria-disabled="true" href="{{ route('about.index') }}">About</a>
+                                <a class="nav-link {{request()->is('tags') ? 'active' : ''}}" href="{{ route('tags.index') }}">Tags</a>
                             </li>
                         </ul>
                     </div>

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Post;
+use App\Models\Tag;
 
 class PostController extends Controller
 {
@@ -15,16 +17,26 @@ class PostController extends Controller
 
     public function create()
     {
-        return view('post.create');
+        $categories = Category::all();
+        $tags = Tag::all();
+
+        return view('post.create', compact('categories', 'tags'));
     }
 
     public function store()
     {
         $data = request()->validate([
-            'title' => 'string',
-            'content' => 'string',
+            'title' => 'required|string',
+            'content' => 'required|string',
+            'category_id' => '',
+            'tag_ids' => '',
         ]);
-        Post::create($data);
+        $tags = $data['tag_ids'];
+        unset($data['tag_ids']);
+
+        $post = Post::create($data);
+
+        $post->tags()->attach($tags);
 
         return redirect()->route('posts.index');
     }
@@ -36,17 +48,26 @@ class PostController extends Controller
 
     public function edit(Post $post)
     {
-        return view('post.edit', compact('post'));
+        $categories = Category::all();
+        $tags = Tag::all();
+
+        return view('post.edit', compact('post', 'categories', 'tags'));
     }
 
     public function update(Post $post)
     {
         $data = request()->validate([
-            'title' => 'string',
+            'title' => 'required|string',
             'content' => 'string',
+            'category_id' => '',
+            'tag_ids' => '',
         ]);
+        $tags = $data['tag_ids'];
+        unset($data['tag_ids']);
 
         $post->update($data);
+
+        $post->tags()->sync($tags);
 
         return redirect()->route('post.show', $post->id);
     }
@@ -56,47 +77,5 @@ class PostController extends Controller
         $post->delete();
 
         return redirect()->route('posts.index');
-    }
-
-    public function firstOrCreate()
-    {
-        $anotherPost = [
-            'title' => 'New',
-            'content' => 'GGGGGGG45454545454',
-            'image' => 'image',
-            'likes' => 769679,
-            'is_published' => 1,
-        ];
-
-        $post = Post::firstOrCreate([
-            'title' => 'New',
-        ], [
-            $anotherPost,
-        ]);
-        dump($post->content);
-        dd('created');
-    }
-
-    public function updateOrCreate()
-    {
-        $anotherPost = [
-            'title' => 'New',
-            'content' => 'GGGGGGG45454545454',
-            'image' => 'image',
-            'likes' => 769679,
-            'is_published' => 1,
-        ];
-
-        $post = Post::updateOrCreate([
-            'title' => 'New',
-        ], [
-            'title' => 'New',
-            'content' => 'new new GGGGGGG45454545454',
-            'image' => 'image',
-            'likes' => 769679,
-            'is_published' => 0,
-        ]);
-        dump($post->content);
-        dd('created');
     }
 }
