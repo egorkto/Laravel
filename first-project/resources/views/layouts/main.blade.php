@@ -30,7 +30,7 @@
                 </div>
             </nav>
         </div>
-        <div class="row">
+        <div class="row mt-5">
             @yield('content')
         </div>
     </div>

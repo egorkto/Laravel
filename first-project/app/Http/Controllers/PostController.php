@@ -10,53 +10,52 @@ class PostController extends Controller
     {
         $posts = Post::all();
 
-        return view('posts', compact('posts'));
+        return view('post.index', compact('posts'));
     }
 
     public function create()
     {
-        $posts = [
-            [
-                'title' => 'lshjnldtkhgpsornmsrfg',
-                'content' => 'fgjnfmpodrjnihmyn;flmgpo4jn6o45ij640g9u459086hjo5hj95486gn4',
-                'image' => 'image',
-                'likes' => 15,
-                'is_published' => 1,
-            ],
-
-            [
-                'title' => 'test2',
-                'content' => 'YOOOO',
-                'image' => 'image',
-                'likes' => 46457,
-                'is_published' => 1,
-            ],
-        ];
-
-        foreach ($posts as $post) {
-            Post::create($post);
-        }
-        dd('created');
+        return view('post.create');
     }
 
-    public function update()
+    public function store()
     {
-        $post = Post::find(1);
-
-        $post->update([
-            'title' => 'updated',
+        $data = request()->validate([
+            'title' => 'string',
+            'content' => 'string',
         ]);
-        dd('updated');
+        Post::create($data);
+
+        return redirect()->route('posts.index');
     }
 
-    public function delete()
+    public function show(Post $post)
     {
-        $post = Post::find(1);
+        return view('post.show', compact('post'));
+    }
+
+    public function edit(Post $post)
+    {
+        return view('post.edit', compact('post'));
+    }
+
+    public function update(Post $post)
+    {
+        $data = request()->validate([
+            'title' => 'string',
+            'content' => 'string',
+        ]);
+
+        $post->update($data);
+
+        return redirect()->route('post.show', $post->id);
+    }
+
+    public function destroy(Post $post)
+    {
         $post->delete();
-        dump('deleted');
-        $post = Post::withTrashed()->find(1);
-        $post->restore();
-        dump('restored');
+
+        return redirect()->route('posts.index');
     }
 
     public function firstOrCreate()
