@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Post;
+namespace App\Http\Controllers\Admin\Post;
 
 use App\Http\Controllers\Controller;
 use App\Http\Filters\PostFilter;
@@ -17,6 +17,6 @@ class IndexController extends Controller
 
         $posts = Post::filter($filter)->paginate(15);
 
-        return view('post.index', compact('posts'));
+        return view('admin.post.index', compact('posts'));
     }
 }

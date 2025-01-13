@@ -1,13 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\IndexController as AdminIndexController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\Post\CreateController;
-use App\Http\Controllers\Post\DestroyController;
-use App\Http\Controllers\Post\EditController;
-use App\Http\Controllers\Post\IndexController;
-use App\Http\Controllers\Post\ShowController;
-use App\Http\Controllers\Post\StoreController;
-use App\Http\Controllers\Post\UpdateController;
 use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,13 +9,21 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/posts', IndexController::class)->name('posts.index');
-Route::get('/posts/create', CreateController::class)->name('post.create');
-Route::post('/posts/store', StoreController::class)->name('post.store');
-Route::get('/posts/{post}', ShowController::class)->name('post.show');
-Route::get('/posts/{post}/edit', EditController::class)->name('post.edit');
-Route::patch('/posts/{post}', UpdateController::class)->name('post.update');
-Route::delete('/posts/{post}', DestroyController::class)->name('post.destroy');
+Route::group(['namespace' => 'App\Http\Controllers\Post'], function () {
+    Route::get('/posts', 'IndexController')->name('posts.index');
+    Route::get('/posts/create', 'CreateController')->name('post.create');
+    Route::post('/posts/store', 'StoreController')->name('post.store');
+    Route::get('/posts/{post}', 'ShowController')->name('post.show');
+    Route::get('/posts/{post}/edit', 'EditController')->name('post.edit');
+    Route::patch('/posts/{post}', 'UpdateController')->name('post.update');
+    Route::delete('/posts/{post}', 'DestroyController')->name('post.destroy');
+});
+
+Route::group(['namespace' => 'App\Http\Controllers\Admin', 'prefix' => 'admin'], function () {
+    Route::group(['namespace' => 'Post'], function () {
+        Route::get('/post', 'IndexController')->name('admin.post.index');
+    });
+});
 
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
 Route::get('/categories/create', [CategoryController::class, 'create'])->name('category.create');
@@ -36,3 +38,8 @@ Route::post('/tags/store', [TagController::class, 'store'])->name('tag.store');
 Route::get('/tags/{tag}/edit', [TagController::class, 'edit'])->name('tag.edit');
 Route::patch('/tags/{tag}', [TagController::class, 'update'])->name('tag.update');
 Route::delete('/tags/{tag}', [TagController::class, 'destroy'])->name('tag.destroy');
+
+Route::get('/admin', AdminIndexController::class)->name('admin.index');
+// Route::get('/admin/post', AdminPostController::class)->name('admin.post.index');
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
