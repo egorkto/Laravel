@@ -22,6 +22,12 @@
                              <li class="nav-item">
                                 <a class="nav-link {{request()->is('tags') ? 'active' : ''}}" href="{{ route('tags.index') }}">Tags</a>
                             </li>
+
+                            @can('view', Auth::user())
+                                <li class="nav-item">
+                                    <a class="nav-link {{request()->is('tags') ? 'active' : ''}}" href="{{ route('admin.post.index') }}">Admin</a>
+                                </li>
+                            @endcan
                         </ul>
                     </div>
                 </div>

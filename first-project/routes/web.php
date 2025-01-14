@@ -3,11 +3,9 @@
 use App\Http\Controllers\Admin\IndexController as AdminIndexController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TagController;
+use App\Http\Middleware\AdminPanelMiddleware;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Route::group(['namespace' => 'App\Http\Controllers\Post'], function () {
     Route::get('/posts', 'IndexController')->name('posts.index');
@@ -21,8 +19,16 @@ Route::group(['namespace' => 'App\Http\Controllers\Post'], function () {
 
 Route::group(['namespace' => 'App\Http\Controllers\Admin', 'prefix' => 'admin'], function () {
     Route::group(['namespace' => 'Post'], function () {
-        Route::get('/post', 'IndexController')->name('admin.post.index');
+        Route::get('/post', 'IndexController')->name('admin.post.index')->middleware(AdminPanelMiddleware::class);
     });
+});
+
+Route::group(['namespace' => 'App\Http\Controllers\Login'], function () {
+    Route::get('/login', 'IndexController')->name('login.index');
+});
+
+Route::group(['namespace' => 'App\Http\Controllers\Register'], function () {
+    Route::get('/register', 'IndexController')->name('register.index');
 });
 
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
@@ -41,5 +47,7 @@ Route::delete('/tags/{tag}', [TagController::class, 'destroy'])->name('tag.destr
 
 Route::get('/admin', AdminIndexController::class)->name('admin.index');
 // Route::get('/admin/post', AdminPostController::class)->name('admin.post.index');
+
+Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
