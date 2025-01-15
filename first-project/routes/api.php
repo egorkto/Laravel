@@ -22,6 +22,13 @@ Route::group([
 
 });
 Route::group(['namespace' => 'App\Http\Controllers\Post'], function () {
-
-    Route::get('/posts', 'IndexController')->middleware(JwtMiddleware::class);
+    Route::middleware([JwtMiddleware::class])->group(function () {
+        Route::get('/posts', 'IndexController');
+        Route::get('/posts/create', 'CreateController');
+        Route::post('/posts/store', 'StoreController');
+        Route::get('/posts/{post}', 'ShowController');
+        Route::get('/posts/{post}/edit', 'EditController');
+        Route::patch('/posts/{post}', 'UpdateController');
+        Route::delete('/posts/{post}', 'DestroyController');
+    });
 });

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Post;
 
 use App\Http\Requests\Post\StoreRequest;
 use App\Http\Resources\Post\PostResource;
+use App\Models\Post;
 
 class StoreController extends BaseController
 {
@@ -13,7 +14,7 @@ class StoreController extends BaseController
 
         $post = $this->service->store($data);
 
-        return new PostResource($post);
+        return $post instanceof Post ? new PostResource($post) : $post;
         // return redirect()->route('posts.index');
     }
 }

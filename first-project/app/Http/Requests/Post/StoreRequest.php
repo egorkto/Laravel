@@ -24,8 +24,9 @@ class StoreRequest extends FormRequest
         return [
             'title' => 'required|string',
             'content' => 'required|string',
-            'category_id' => '',
-            'tag_ids' => '',
+            'category' => '',
+            'tags' => '',
+            'tags.*.title' => '',
         ];
     }
 }
