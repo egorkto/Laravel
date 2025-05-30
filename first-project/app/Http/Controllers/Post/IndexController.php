@@ -21,7 +21,7 @@ class IndexController extends Controller
 
         $posts = Post::filter($filter)->paginate($perPage, ['*'], 'page', $page);
 
-        return PostResource::collection($posts);
-        // return view('post.index', compact('posts'));
+        // return PostResource::collection($posts);
+        return view('post.index', compact('posts'));
     }
 }

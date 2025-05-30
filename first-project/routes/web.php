@@ -7,6 +7,8 @@ use App\Http\Middleware\AdminPanelMiddleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+Route::redirect('/', '/posts');
+
 Route::group(['namespace' => 'App\Http\Controllers\Post'], function () {
     Route::get('/posts', 'IndexController')->name('posts.index');
     Route::get('/posts/create', 'CreateController')->name('post.create');
